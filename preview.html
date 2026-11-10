@@ -38,16 +38,8 @@
     align-items:center;justify-content:center;cursor:pointer;border-radius:22px}
   .pen:active{background:#f5f5f5}
 
-  /* ---------------- 巨数字 ---------------- */
-  .hero{height:356px;flex:none;display:flex;flex-direction:column}
-  .heroNum{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
-  .num{display:flex;justify-content:center;line-height:1;font-weight:800;color:#111;
-    font-variant-numeric:tabular-nums}
-  .col{width:calc(var(--n) * .62);height:var(--n);overflow:hidden;position:relative}
-  .strip{position:absolute;left:0;right:0;top:0;will-change:transform}
-  .cell{height:var(--n);display:flex;align-items:center;justify-content:center}
-  .numLabel{font-size:11px;font-weight:500;letter-spacing:6px;padding-left:6px;color:#9a9a9a;margin-top:10px}
-
+  /* ---------------- 核心区：按钮 + 统计 ---------------- */
+  .hero{height:330px;flex:none;display:flex;flex-direction:column;justify-content:center}
   .cta{
     margin:0 56px;height:64px;flex:none;border:0;border-radius:32px;cursor:pointer;
     display:flex;align-items:center;justify-content:center;gap:8px;
@@ -57,10 +49,12 @@
     box-shadow:0 12px 26px -6px rgba(0,0,0,.2);
   }
   .cta:active{transform:scale(.955)}
-  .cta.done{background:#fff;color:#111;letter-spacing:1.2px;font-size:14px;padding-left:0;
-    box-shadow:inset 0 0 0 1.2px #eaeaea}
+  /* 打卡成功：绿色实底，颜色反馈明确 */
+  .cta.done{background:#4caf50;color:#fff;letter-spacing:1.2px;font-size:14px;padding-left:0;
+    box-shadow:0 12px 26px -8px rgba(76,175,80,.5)}
+  .cta.done svg{stroke:#fff}
 
-  .hintWrap{height:30px;flex:none;display:flex;align-items:center;justify-content:center;margin-top:12px}
+  .hintWrap{height:30px;flex:none;display:flex;align-items:center;justify-content:center;margin-top:14px}
   .hint{border:0;font-family:inherit;cursor:pointer;height:28px;padding:0 14px;border-radius:14px;
     background:#f4f4f4;display:flex;align-items:center;gap:0;transition:transform .14s ease}
   .hint:active{transform:scale(.96)}
@@ -68,6 +62,13 @@
   .hint .sep{width:1px;height:9px;background:#d8d8d8;margin:0 8px}
   .hint .b{font-size:11.5px;font-weight:700;color:#111}
   .dead{font-size:11.5px;color:#b5b5b5;letter-spacing:.4px}
+
+  /* 三格统计：当前连续 / 最长连续 / 总打卡 */
+  .stats{flex:none;display:flex;align-items:stretch;margin-top:16px}
+  .stat{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+  .stat b{font-size:19px;font-weight:800;color:#111;line-height:1;font-variant-numeric:tabular-nums}
+  .stat span{font-size:10.5px;font-weight:500;color:#9a9a9a;letter-spacing:.6px}
+  .stat + .stat{border-left:1px solid #f0f0f0}
 
   /* ---------------- 日历 ---------------- */
   .week{height:34px;flex:none;display:grid;grid-template-columns:repeat(7,1fr);padding:0 10px}
@@ -86,7 +87,6 @@
   .dnum{font-size:16px;line-height:16px;font-variant-numeric:tabular-nums;font-weight:500;color:#e0e0e0}
   .dsub{height:11px;display:flex;align-items:center;justify-content:center;font-size:8px;
     font-weight:500;letter-spacing:.5px}
-  .dot{width:3.5px;height:3.5px;border-radius:50%;background:#dcdcdc;display:none}
   .dd.today{background:#4caf50}
   .dd.today .dnum{color:#fff;font-weight:800}
   .dd.today .dsub{color:rgba(255,255,255,.82);font-weight:600}
@@ -146,7 +146,7 @@
     transition:opacity .24s ease;z-index:35}
   .scrim2.on{opacity:1;pointer-events:auto}
   .daySheet{position:absolute;left:0;right:0;bottom:0;background:#fff;z-index:36;
-    border-radius:30px 30px 0 0;padding:10px 0 26px;
+    border-radius:30px 30px 0 0;padding:10px 0 24px;
     transform:translateY(100%);transition:transform .32s cubic-bezier(.22,.61,.36,1);
     box-shadow:0 -18px 40px -20px rgba(0,0,0,.18)}
   .daySheet.on{transform:translateY(0)}
@@ -163,15 +163,16 @@
   .dsNoteLabel{font-size:10px;font-weight:600;color:#bdbdbd;letter-spacing:2px}
   .dsNoteText{margin-top:8px;font-size:14.5px;line-height:1.65;color:#111;
     display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  /* 补打卡 / 取消补签 操作区 */
+  .dsActions{display:none;padding:16px 24px 0}
+  .dsActions.on{display:block}
+  .dsAction{width:100%;height:46px;border:0;border-radius:23px;font-family:inherit;font-size:14px;
+    font-weight:700;letter-spacing:2px;cursor:pointer;background:#f4f4f4;color:#111;
+    transition:transform .14s ease}
+  .dsAction:active{transform:scale(.97)}
+  .dsAction.cancel{color:#e53935;background:#fdf1f1}
   .day.tap{cursor:pointer}
   .day.tap:active .dd:not(.today){background:#f5f5f5}
-
-  /* ---------------- 顶部统计（当前连续 / 最长连续 / 总打卡） ---------------- */
-  .stats{height:46px;flex:none;display:flex;align-items:stretch;margin-top:2px}
-  .stat{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
-  .stat b{font-size:17px;font-weight:800;color:#111;line-height:1;font-variant-numeric:tabular-nums}
-  .stat span{font-size:10px;font-weight:500;color:#9a9a9a;letter-spacing:.6px}
-  .stat + .stat{border-left:1px solid #f0f0f0}
 
   /* ---------------- Toast 轻提示 ---------------- */
   .toast{position:absolute;left:50%;bottom:150px;background:rgba(17,17,17,.9);color:#fff;
@@ -246,6 +247,9 @@
       <div class="dsNoteLabel">记 事</div>
       <div class="dsNoteText" id="dsNoteText"></div>
     </div>
+    <div class="dsActions" id="dsActions">
+      <button class="dsAction" id="dsAction"></button>
+    </div>
   </div>
 
   <div class="dlgWrap" id="dlgWrap">
@@ -268,7 +272,7 @@
   var now = new Date();
   var TODAY = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   var WD = ['一', '二', '三', '四', '五', '六', '日'];
-  var GRACE = 6, CARDS = 6, SIZE = 114, W = 390;
+  var GRACE = 6, CARDS = 6, W = 390;
 
   function key(d) {
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
@@ -281,40 +285,66 @@
   function hhmm(hh, mm) {
     return String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
   }
-  // 模拟「那一天几点几分打的卡」。用天数当种子，保证每次刷新看到的时间一致。
-  function stamp(daysAgo, baseHour, span) {
-    return { hh: baseHour + (daysAgo * 7) % span, mm: (daysAgo * 17) % 60, mk: 0 };
-  }
+  function dayLabel(d) { return (d.getMonth() + 1) + '月' + d.getDate() + '日'; }
   function nowRec() {
     var n = new Date();
     return { hh: n.getHours(), mm: n.getMinutes(), mk: 0 };
   }
 
+  /* ================= 本地持久化（localStorage） ================= */
+  // v2：从本版起不再预置演示数据，全部从真实 0 开始。
+  // 旧版 v1 里存的是假数据（且打卡记录是纯数字 1，不含时刻），直接弃用不再读取。
+  var LS_KEY = 'streak.data.v2';
+
+  function persist() {
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify({
+        idx: idx,
+        habits: habits.map(function (h) {
+          return { id: h.id, name: h.name, glyph: h.glyph, checked: h.checked, notes: h.notes, cards: h.cards };
+        })
+      }));
+    } catch (e) { /* 隐身模式等 localStorage 不可用的场景：静默降级为内存模式 */ }
+  }
+
+  function restore() {
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      if (!raw) return false;
+      var d = JSON.parse(raw);
+      if (!d || !Array.isArray(d.habits) || !d.habits.length) return false;
+      habits = d.habits.map(function (h) {
+        var name = String(h.name || '项目');
+        var checked = (h.checked && typeof h.checked === 'object') ? h.checked : {};
+        // 兼容迁移：旧记录可能是纯数字（只有"打过"没有时刻），统一补成对象
+        for (var kk in checked) {
+          if (checked.hasOwnProperty(kk) && (typeof checked[kk] !== 'object' || checked[kk] === null)) {
+            checked[kk] = { hh: 9, mm: 0, mk: 0 };
+          }
+        }
+        return {
+          id: String(h.id || 'h' + Math.random().toString(36).slice(2)),
+          name: name,
+          glyph: String(h.glyph || name.substring(0, 1)),
+          checked: checked,
+          notes: (h.notes && typeof h.notes === 'object') ? h.notes : {},
+          cards: typeof h.cards === 'number' ? h.cards : CARDS
+        };
+      });
+      idx = Math.min(Math.max(0, d.idx | 0), habits.length - 1);
+      return true;
+    } catch (e) { return false; }
+  }
+
   /* ================= 数据 ================= */
+  var idx = 0;
+
+  // 不预置任何假数据：第一次访问只有一个空白项目，所有统计都是真实的 0
   var habits = [];
-
-  (function seed() {
-    // 早起：350 天连到今天昨天，今天未打
-    var early = { id: 'early', name: '早起', glyph: '早', checked: {}, notes: {}, cards: CARDS };
-    for (var i = 1; i <= 350; i++) early.checked[key(back(i))] = stamp(i, 5, 4);
-    var s = 20261109;
-    function rnd() { s = (s * 1103515245 + 12345) % 2147483648; return s / 2147483648; }
-    for (var j = 355; j <= 470; j++) { if (rnd() < 0.55) early.checked[key(back(j))] = stamp(j, 5, 4); }
-    early.notes[key(back(1))] = '早上跑步 5km';
-    early.notes[key(back(3))] = '状态不错，继续。';
-
-    // 阅读：连续 12 天，断了 2 天
-    var read = { id: 'read', name: '阅读', glyph: '读', checked: {}, notes: {}, cards: CARDS };
-    for (var a = 3; a <= 14; a++) read.checked[key(back(a))] = stamp(a, 20, 4);
-    for (var b = 20; b <= 26; b++) read.checked[key(back(b))] = stamp(b, 20, 4);
-    read.notes[key(back(5))] = '《人类简史》第 4 章';
-
-    // 健身：断了 9 天，已清零
-    var fit = { id: 'fit', name: '健身', glyph: '健', checked: {}, notes: {}, cards: CARDS };
-    for (var c = 10; c <= 15; c++) fit.checked[key(back(c))] = stamp(c, 18, 3);
-
-    habits.push(early, read, fit);
-  })();
+  if (!restore()) {
+    habits.push({ id: 'early', name: '早起', glyph: '早', checked: {}, notes: {}, cards: CARDS });
+    persist();
+  }
 
   /* ================= 连续天数 / 补签 ================= */
   function compute(h) {
@@ -336,16 +366,42 @@
     return { days: prev, gap: gap, makable: h.cards >= gap, broken: false, restored: prev + gap };
   }
 
+  // 断卡场景：把今天往前 info.gap 天全部补上（各扣 1 张额度）
   function doMakeup(h) {
     var info = compute(h);
     if (!info.makable || !info.gap) return false;
     var n = new Date();
-    var dm = (n.getMonth() + 1) + '月' + n.getDate() + '日 ';
+    var dm = dayLabel(TODAY) + ' ';
     for (var i = 1; i <= info.gap; i++) {
       h.checked[key(back(i))] = { hh: n.getHours(), mm: n.getMinutes(), mk: 1, dm: dm };
     }
     h.cards = Math.max(0, h.cards - info.gap);
     persist();
+    return true;
+  }
+
+  // 单日补打卡：点日历上任意一个未打卡的过去日期
+  function makeupDay(h, d) {
+    if (h.checked[key(d)]) return false;
+    if (h.cards <= 0) { toast('补签额度已用完'); return false; }
+    var n = new Date();
+    h.checked[key(d)] = { hh: n.getHours(), mm: n.getMinutes(), mk: 1, dm: dayLabel(n) + ' ' };
+    h.cards -= 1;
+    persist();
+    paint(h);
+    toast('已补打卡 · ' + dayLabel(d));
+    return true;
+  }
+
+  // 取消某天的补签，退还 1 张额度
+  function cancelMakeup(h, d) {
+    var rec = h.checked[key(d)];
+    if (!rec || !rec.mk) return false;
+    delete h.checked[key(d)];
+    h.cards = Math.min(CARDS, h.cards + 1);
+    persist();
+    paint(h);
+    toast('已取消补签 · ' + dayLabel(d));
     return true;
   }
 
@@ -362,68 +418,6 @@
       } else run = 1;
     }
     return best;
-  }
-
-  /* ================= 超大滚动数字 ================= */
-  function ty(h, pos) { return 'translateY(' + (-(pos + 10) * SIZE) + 'px)'; }
-  function digitAt(pos) { return ((pos % 10) + 10) % 10; }
-
-  function buildNumber(h, value, spin) {
-    var el = h.numEl;
-    el.innerHTML = '';
-    el.style.setProperty('--n', SIZE + 'px');
-    h.cols = [];
-    var ds = String(value).split('');
-    for (var i = 0; i < ds.length; i++) {
-      var d = Number(ds[i]);
-      var col = document.createElement('div'); col.className = 'col';
-      var strip = document.createElement('div'); strip.className = 'strip';
-      for (var k = -10; k <= 20; k++) {
-        var c = document.createElement('div'); c.className = 'cell';
-        c.textContent = String(((k % 10) + 10) % 10);
-        strip.appendChild(c);
-      }
-      col.appendChild(strip); el.appendChild(col);
-      h.cols.push({ strip: strip, pos: spin ? d - 10 : d, digit: d, delay: 70 * i });
-    }
-    h.cols.forEach(function (c) { c.strip.style.transition = 'none'; c.strip.style.transform = ty(h, c.pos); });
-    if (spin) {
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          h.cols.forEach(function (c) {
-            c.strip.style.transition = 'transform 560ms cubic-bezier(.215,.61,.355,1) ' + c.delay + 'ms';
-            c.pos = c.digit;
-            c.strip.style.transform = ty(h, c.pos);
-          });
-        });
-      });
-    }
-  }
-
-  function snap(h, c, digit) {
-    // 滚动结束后把位置归一到 0..9，避免连续加很多天后位置跑出预渲染的格数
-    c.pos = digit;
-    c.strip.style.transition = 'none';
-    c.strip.style.transform = ty(h, c.pos);
-  }
-
-  function setNumber(h, value) {
-    var ds = String(value).split('');
-    if (!h.cols || ds.length !== h.cols.length) { buildNumber(h, value, false); return; }
-    for (var i = 0; i < ds.length; i++) {
-      var c = h.cols[i], d = Number(ds[i]);
-      var base = Math.round(c.pos);
-      var delta = ((d - digitAt(base)) + 10) % 10;
-      if (delta === 0) continue;
-      var target = delta <= 5 ? base + delta : base - (10 - delta);
-      c.pos = target;
-      c.strip.style.transition = 'transform 560ms cubic-bezier(.215,.61,.355,1)';
-      c.strip.style.transform = ty(h, c.pos);
-      clearTimeout(c.timer);
-      c.timer = setTimeout(function (col, dg) {
-        return function () { snap(h, col, dg); };
-      }(c, d), 640);
-    }
   }
 
   /* ================= 日历 ================= */
@@ -478,16 +472,13 @@
           dd.classList.add('today');
           sub.textContent = '今天';
           h.todayCell = dd;
-        } else {
-          var dot = document.createElement('i'); dot.className = 'dot';
-          sub.appendChild(dot);
         }
         // 每一天都能点：未来的日子也会弹窗，只是内容显示「还没到」
         wrap.classList.add('tap');
         wrap.addEventListener('click', function () { onDayTap(h, d); });
         dd.appendChild(num); dd.appendChild(sub); wrap.appendChild(dd);
         r.appendChild(wrap);
-        h.cells.push({ num: num, sub: sub, dot: sub.firstChild, d: d, inMonth: inMonth, isToday: isToday });
+        h.cells.push({ num: num, d: d, inMonth: inMonth, isToday: isToday });
       });
       frag.appendChild(r);
     });
@@ -495,6 +486,8 @@
     calEl.scrollTop = monthOffset;
   }
 
+  // 状态只用数字颜色区分，不再有小圆点：
+  //   未打卡 = 浅灰 / 已打卡 = 纯黑加粗 / 今天 = 绿色实心圆白字 / 非本月 = 极淡灰
   function paintCells(h) {
     for (var i = 0; i < h.cells.length; i++) {
       var c = h.cells[i];
@@ -510,56 +503,11 @@
         c.num.style.color = '#e0e0e0';
         c.num.style.fontWeight = '500';
       }
-      if (c.dot) {
-        var noted = c.inMonth && !!h.notes[key(c.d)];
-        c.dot.style.display = noted ? 'block' : 'none';
-        c.dot.style.background = ck ? '#b0b0b0' : '#dcdcdc';
-      }
     }
   }
 
   /* ================= 页面构建 ================= */
   var PAGER = $('pager');
-  var idx = 0;
-
-  /* ================= 本地持久化（localStorage） ================= */
-  var LS_KEY = 'streak.data.v1';
-
-  function persist() {
-    try {
-      localStorage.setItem(LS_KEY, JSON.stringify({
-        idx: idx,
-        habits: habits.map(function (h) {
-          return { id: h.id, name: h.name, glyph: h.glyph, checked: h.checked, notes: h.notes, cards: h.cards };
-        })
-      }));
-    } catch (e) { /* 隐身模式等 localStorage 不可用的场景：静默降级为内存模式 */ }
-  }
-
-  function restore() {
-    try {
-      var raw = localStorage.getItem(LS_KEY);
-      if (!raw) return false;
-      var d = JSON.parse(raw);
-      if (!d || !Array.isArray(d.habits) || !d.habits.length) return false;
-      habits = d.habits.map(function (h) {
-        var name = String(h.name || '项目');
-        return {
-          id: String(h.id || 'h' + Math.random().toString(36).slice(2)),
-          name: name,
-          glyph: String(h.glyph || name.substring(0, 1)),
-          checked: h.checked || {},
-          notes: h.notes || {},
-          cards: typeof h.cards === 'number' ? h.cards : CARDS
-        };
-      });
-      idx = Math.min(Math.max(0, d.idx | 0), habits.length - 1);
-      return true;
-    } catch (e) { return false; }
-  }
-
-  // 有历史数据就恢复；第一次访问则把演示数据写进去
-  if (!restore()) persist();
 
   var CHECK_SVG = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>';
   var CHEV = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9a9a9a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>';
@@ -585,18 +533,14 @@
     pen.addEventListener('click', openNote);
     bar.appendChild(pname); bar.appendChild(pen);
 
+    // 核心区：打卡按钮 + 断卡提示 + 三格统计（当前连续 / 最长连续 / 总打卡）
     var hero = document.createElement('div'); hero.className = 'hero';
-    var heroNum = document.createElement('div'); heroNum.className = 'heroNum';
-    var num = document.createElement('div'); num.className = 'num';
-    var label = document.createElement('div'); label.className = 'numLabel'; label.textContent = '连续天数';
-    heroNum.appendChild(num); heroNum.appendChild(label);
 
     var cta = document.createElement('button'); cta.className = 'cta';
     cta.addEventListener('click', function () { checkIn(h); });
 
     var hintWrap = document.createElement('div'); hintWrap.className = 'hintWrap';
 
-    // 顶部三格统计：当前连续 / 最长连续 / 总打卡
     function statBlock() {
       var s = document.createElement('div'); s.className = 'stat';
       var b = document.createElement('b'); var t = document.createElement('span');
@@ -607,7 +551,7 @@
     var stats = document.createElement('div'); stats.className = 'stats';
     stats.appendChild(h.stCur.root); stats.appendChild(h.stBest.root); stats.appendChild(h.stTot.root);
 
-    hero.appendChild(heroNum); hero.appendChild(cta); hero.appendChild(hintWrap); hero.appendChild(stats);
+    hero.appendChild(cta); hero.appendChild(hintWrap); hero.appendChild(stats);
 
     var week = document.createElement('div'); week.className = 'week';
     week.innerHTML = WD.map(function (w) { return '<span>' + w + '</span>'; }).join('');
@@ -616,21 +560,21 @@
 
     page.appendChild(bar); page.appendChild(hero); page.appendChild(week); page.appendChild(cal);
 
-    h.el = page; h.numEl = num; h.cta = cta; h.hintWrap = hintWrap; h.dotsEl = dots; h.calEl = cal; h.pnText = pnText;
+    h.el = page; h.cta = cta; h.hintWrap = hintWrap; h.dotsEl = dots; h.calEl = cal; h.pnText = pnText;
     return page;
   }
 
   function paint(h) {
     var info = compute(h);
-    setNumber(h, info.days);
 
+    // 按钮状态：未打卡 = 黑底「今日打卡」；已打卡 = 绿底「打卡成功」；再点一次 = 取消
     var done = !!h.checked[TODAY_KEY];
     if (done) {
       h.cta.classList.add('done');
       h.cta.innerHTML = CHECK_SVG + '<span>打卡成功</span>';
     } else {
       h.cta.classList.remove('done');
-      h.cta.innerHTML = '<span>打 卡</span>';
+      h.cta.innerHTML = '<span>今日打卡</span>';
     }
 
     if (info.broken) {
@@ -650,6 +594,7 @@
       h.hintWrap.innerHTML = '';
     }
 
+    // 三格统计：永远是真实计算值，没有任何写死数据
     var total = 0;
     for (var kk in h.checked) if (h.checked.hasOwnProperty(kk)) total++;
     h.stCur.b.textContent = String(info.days);
@@ -706,8 +651,6 @@
       var p = createPage(h);
       PAGER.appendChild(p);
       buildCalendar(h, h.calEl);
-      h.numEl.style.setProperty('--n', SIZE + 'px');
-      buildNumber(h, compute(h).days, true);
       paint(h);
     });
     updateDots();
@@ -763,8 +706,9 @@
   PAGER.addEventListener('pointercancel', endDrag);
   PAGER.addEventListener('pointerleave', function () { if (drag && drag.lock === 'x') endDrag(); });
 
-  /* ================= 某天详情 ================= */
+  /* ================= 某天详情 + 补打卡 ================= */
   var daySheet = $('daySheet'), dayScrim = $('dayScrim');
+  var dsActions = $('dsActions'), dsAction = $('dsAction');
   var dayCtx = null;
 
   function onDayTap(h, d) {
@@ -780,6 +724,7 @@
     var rec = h.checked[key(d)];
     var big = $('dsBig'), sub = $('dsSub');
     big.className = 'dsBig';
+    var past = d.getTime() < TODAY.getTime();
     if (d.getTime() > TODAY.getTime()) {
       big.classList.add('miss');
       big.textContent = '—';
@@ -787,7 +732,7 @@
     } else if (!rec) {
       big.classList.add('miss');
       big.textContent = '未打卡';
-      sub.textContent = d.getTime() === TODAY.getTime() ? '今天还没打卡' : '那天没有打卡记录';
+      sub.textContent = past ? '那天没有打卡记录' : '今天还没打卡';
     } else if (rec.mk) {
       big.classList.add('mk');
       big.textContent = '补签';
@@ -804,6 +749,25 @@
       noteEl.classList.add('on');
     } else {
       noteEl.classList.remove('on');
+    }
+
+    // 操作区：过去的未打卡日期可以补打卡；补签的记录可以取消（退额度）
+    dsActions.classList.remove('on');
+    dsAction.className = 'dsAction';
+    dsAction.onclick = null;
+    if (past && !rec) {
+      dsAction.textContent = '补打卡';
+      dsAction.onclick = function () {
+        if (makeupDay(h, d)) closeDay();
+      };
+      dsActions.classList.add('on');
+    } else if (rec && rec.mk) {
+      dsAction.textContent = '取消补签';
+      dsAction.classList.add('cancel');
+      dsAction.onclick = function () {
+        if (cancelMakeup(h, d)) closeDay();
+      };
+      dsActions.classList.add('on');
     }
 
     dayScrim.classList.add('on');
@@ -967,7 +931,6 @@
     var h = noteCtx.h;
     if (t) h.notes[noteCtx.k] = t; else delete h.notes[noteCtx.k];
     persist();
-    paintCells(h);
     closeNote();
     toast('已保存');
   }
